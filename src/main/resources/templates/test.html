@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title th:text="'Test ' + ${test.number}"></title>
+    <script type="text/javascript" th:inline="javascript">
+
+        function startTimer(duration, display, displayBox) {
+            let remaining = duration;
+            let timer = setInterval(function () {
+                display.textContent = Math.ceil(remaining / 60.0).toString();
+
+                if (--remaining < 0) {
+                    displayBox.textContent = "Čas na test vypršal";
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            const maxDuration = /*[[${maxDuration}]]*/ 120;
+            const display = document.querySelector('#timer');
+            const displayBox = document.querySelector("#timer-box")
+            startTimer(maxDuration * 60, display, displayBox);
+
+            setInterval(function () {
+                const appUrl = /*[[${appUrl}]]*/ "/";
+                console.log("Sending PING")
+                const xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("GET", appUrl, false); // false for synchronous request
+                xmlHttp.send(null);
+                console.log("PING sent")
+            }, 1000 * 60 * 10)
+        };
+    </script>
+</head>
+<body>
+<main layout:fragment="content">
+    <header>
+        <h1 class="ui center aligned header" th:text="'Test ' + ${test.number}"></h1>
+    </header>
+
+    <div class="ui raised segment" th:unless="${allowed}">
+        Nemáte prístup k tomuto testu. Požiadajte administrátora o vytvorenie prístupového odkazu.
+    </div>
+    <div th:if="${allowed}" class="ui sticky" id="timer-box">Ostáva Vám ešte <span id="timer">XXX</span> minút na
+        riešenie.
+    </div>
+
+    <div id="test">
+        <form th:if="${allowed}" class="ui form" th:object="${solutions}" method="post"
+              th:action="@{/test/{testNumber}/score(testNumber=${test.number}, token=${token})}">
+            <th:block th:each="question: ${questions}">
+                <div class="ui raised segment" th:object="${question.value}">
+                    <strong th:utext="${question.index + 1} + '. ' + *{text}"></strong>
+                    <div class="grouped fields">
+                        <th:block th:each="answer: *{answers}">
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" th:name="*{number} + '-' + *{subject}"
+                                           th:value="${answer.letter}">
+                                    <label th:utext="${answer.text}"></label>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="ui divider"></div>
+            </th:block>
+            <button class="ui right floated submit button" tabindex="0" type="submit">Vyhodnotiť</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Vyberte si test</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <header>
+        <h1 class="ui center aligned header">Vyberte si test</h1>
+    </header>
+    <div style="text-align: center; margin-bottom: 20px">
+        <a style="font-weight: bold; font-size: 20px" href="/generate">Vygenerovať prístupový odkaz</a>
+    </div>
+
+    <div class="container">
+        <th:block th:each="test: ${tests}">
+            <a th:href="'/test/'+ ${test.number}">
+                <div class="item" th:text="${test.number}"></div>
+            </a>
+        </th:block>
+    </div>
+</main>
+</body>
+</html>

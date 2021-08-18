@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Vygenerovať link na test</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <header>
+        <h1 class="ui center aligned header">Vygenerovať link na test</h1>
+    </header>
+    <div style="text-align: center; margin-bottom: 20px">
+        <a style="font-weight: bold; font-size: 20px" href="/">Späť na prehľad testov</a>
+    </div>
+
+    <form class="ui form" method="post"
+          th:action="@{/generate}">
+        <div class="ui raised segment">
+            <strong>Vyberte číslo testu, ku ktorému sa má vygenerovať jednorázový link:</strong>
+            <div class="field">
+                <select name="testNumber" class="ui dropdown">
+                    <th:block th:each="testNumber: ${testNumbers}">
+                        <option th:value="${testNumber}" th:text="${testNumber}"></option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+        <button class="ui right floated submit button" tabindex="0" type="submit">Vygenerovať</button>
+    </form>
+    <p th:if="${token != null}">
+        <strong>Vygenerovaný odkaz: </strong><em
+            th:text="${appUrl} + 'test/' + ${testNumber} + '?token=' + ${token}"></em>
+    </p>
+</main>
+</body>
+</html>

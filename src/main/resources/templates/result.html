@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title th:text="'Test ' + ${testNumber} + ' - Vyhodnotenie'"></title>
+</head>
+<body>
+<main layout:fragment="content">
+    <header th:if="${allowed}">
+        <h1 class="ui center aligned header"
+            th:text="'Vaše skóre pre test ' + ${testNumber} + ' je ' + ${score} + '/' + ${maxScore}"></h1>
+    </header>
+    <div class="ui raised segment" th:unless="${allowed}">
+        Nemáte prístup k tomuto testu. Požiadajte administrátora o vytvorenie prístupového odkazu.
+    </div>
+    <div class="ui raised segment" th:if="${duration > maxDuration}"
+         th:text="'Prekročili ste povolený čas na riešenie testu. Váš čas: ' + ${duration} + ' minút. Povolený čas: ' + ${maxDuration} + ' minút'">
+    </div>
+    <th:block th:if="${allowed}" th:each="question: ${questions}">
+        <div class="ui raised segment" th:object="${question.value}">
+            <strong th:utext="${question.index + 1} + '. ' + *{text}"></strong>
+            <div class="grouped fields">
+                <th:block th:each="answer: *{answers}">
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input disabled th:checked="${answer.marked}" type="checkbox"
+                                   th:name="*{number} + '-' + *{subject}"
+                                   th:value="${answer.letter}">
+                            <label th:class="${answer.correct} ? 'correct' : 'incorrect'"
+                                   th:utext="${answer.text}"></label>
+                            <strong th:class="${answer.correct} ? 'correct' : 'incorrect'" th:if="${answer.marked}"
+                                    th:text="${answer.correct} ? ' (+1)' : ' (-2)'"></strong>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+        <div class="ui divider"></div>
+    </th:block>
+</main>
+</body>
+</html>

@@ -1,0 +1,59 @@
+main {
+    padding-top: 50px;
+    margin: auto;
+    width: 60%;
+}
+
+h1 {
+    margin-bottom: 50px !important;
+}
+
+button {
+    width: 100% !important;
+    margin-bottom: 30px !important;
+}
+
+.container {
+    margin-left: 50px;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.item {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    background-color: lightgray;
+    color: black;
+    font-size: 20px;
+    text-align: center;
+    padding-top: 40px;
+    font-weight: bold;
+}
+
+.item:hover {
+    background-color: gray;
+}
+
+.correct {
+    color: darkgreen !important;
+    display: inline !important;
+}
+
+.incorrect {
+    color: darkred !important;
+    display: inline !important;
+}
+
+#timer-box {
+    background-color: lightgray;
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+    font-weight: bold;
+    color: black;
+    position: fixed !important;
+    font-size: 18px;
+    bottom: 20px !important;
+    right: 20px !important;
+}
